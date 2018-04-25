@@ -8,6 +8,15 @@ const {
   GraphQLSchema
 } = graphql;
 
+const HjsTalkType = new GraphQLObjectType({
+  name: 'HjsTalk',
+  fields: {
+    id: { type: GraphQLString },
+    name: { type: GraphQLString },
+    description: { type: GraphQLString }
+  }
+});
+
 const HjsUserType = new GraphQLObjectType({
   name: 'HjsUser',
   fields: {
@@ -16,7 +25,10 @@ const HjsUserType = new GraphQLObjectType({
     lastname: { type: GraphQLString },
     sexo: { type: GraphQLString },
     email: { type: GraphQLString },
-    age: { type: GraphQLInt }
+    age: { type: GraphQLInt },
+    talk: {
+      type: HjsTalkType
+    }
   }
 });
 
