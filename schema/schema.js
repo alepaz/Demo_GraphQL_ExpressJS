@@ -27,7 +27,10 @@ const HjsUserType = new GraphQLObjectType({
     email: { type: GraphQLString },
     age: { type: GraphQLInt },
     talk: {
-      type: HjsTalkType
+      type: CompanyType,
+      resolve(parentValue, args) {
+        return axios.get(`http://localhost:3000/talks/${parentValue.companyId}`)
+          .then(res => res.data);
     }
   }
 });
