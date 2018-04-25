@@ -3,7 +3,8 @@ const graphql = require('graphql');
 const {
   GraphQLObjectType,
   GraphQLString,
-  GraphQLInt
+  GraphQLInt,
+  GraphQLSchema
 } = graphql;
 
 const HjsUserType = new GraphQLObjectType({
@@ -29,4 +30,8 @@ const RootQuery = new GraphQLObjectType({
       }
     }
   }
+});
+
+module.exports = new GraphQLSchema({
+  query: RootQuery
 });
