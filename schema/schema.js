@@ -5,21 +5,29 @@ const {
   GraphQLObjectType,
   GraphQLString,
   GraphQLInt,
-  GraphQLSchema
+  GraphQLSchema,
+  GraphQLList
 } = graphql;
 
 const HjsTalkType = new GraphQLObjectType({
   name: 'HjsTalk',
-  fields: {
+  fields: () => ({
     id: { type: GraphQLString },
     name: { type: GraphQLString },
-    description: { type: GraphQLString }
-  }
+    description: { type: GraphQLString },
+    user: {
+      type: new GraphQLList(HjsUserType),
+      resolve(parentValue, args) {
+        return axios.get(`http://localhost:3000/talks/${parentValue.id}/users`)
+          .then(res => res.data)
+      }
+    }
+  })
 });
 
 const HjsUserType = new GraphQLObjectType({
   name: 'HjsUser',
-  fields: {
+  fields: () => ({
     id: { type: GraphQLString },
     name: { type: GraphQLString },
     lastname: { type: GraphQLString },
@@ -34,7 +42,7 @@ const HjsUserType = new GraphQLObjectType({
           .then(res => res.data);
       }
     }
-  }
+  })
 });
 
 const RootQuery = new GraphQLObjectType({
@@ -46,6 +54,14 @@ const RootQuery = new GraphQLObjectType({
       resolve(parentValue, args) {
         return axios.get(`http://localhost:3000/users/${args.id}`)
         .then(resp => resp.data);
+      }
+    },
+    talk: {
+      type: HjsTalkType,
+      args: { id: { type: GraphQLString } },
+      resolve(parentValue, args) {
+        return axios.get(`http://localhost:3000/talks/${args.id}`)
+          .then(resp => resp.data);
       }
     }
   }
